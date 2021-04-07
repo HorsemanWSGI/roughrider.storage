@@ -1,8 +1,9 @@
-from abc import ABC, abstract_method
-from typing import NamedTuple, Optional, BinaryIO
+from abc import ABC, abstractmethod
+from typing import NamedTuple, Optional, BinaryIO, Mapping
+from pathlib import Path
 
 
-class FileInfo(typing.NamedTuple):
+class FileInfo(NamedTuple):
     ticket: str
     namespace: str
     filename: str
@@ -13,16 +14,17 @@ class FileInfo(typing.NamedTuple):
 
 class Storage:
     name: str
+    root: Path
 
-    @abstract_method
+    @abstractmethod
     def generate_ticket(self) -> str:
         pass
 
-    @abstract_method
+    @abstractmethod
     def retrieve(self, ticket: str) -> BinaryIO:
         pass
 
-    @abstract_method
+    @abstractmethod
     def store(self, filename, data: BinaryIO, **metadata) -> FileInfo:
         pass
 
@@ -30,9 +32,9 @@ class Storage:
 class Uploader:
     namespaces: Mapping[str, Storage]
 
-    def get(self, metadata: FileMetadata):
-        namespace = namespace.get(metadata.namespace)
+    def get(self, info: FileInfo):
+        namespace = namespace.get(info.namespace)
         if namespace is None:
             raise LookupError(
-                f'Namespace `{metadata.namespace}` does not exist.')
-        return namespace.retrieve(metadata.ticket)
+                f'Namespace `{info.namespace}` does not exist.')
+        return namespace.retrieve(info.ticket)
