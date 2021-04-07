@@ -5,10 +5,9 @@ from pathlib import Path
 
 class FileInfo(NamedTuple):
     ticket: str
-    namespace: str
-    filename: str
     size: int
-    md5_checksum: str
+    checksum: str
+    storage: str
     metadata: Optional[dict] = None
 
 
@@ -25,7 +24,7 @@ class Storage:
         pass
 
     @abstractmethod
-    def store(self, filename, data: BinaryIO, **metadata) -> FileInfo:
+    def store(self, data: BinaryIO, **metadata) -> FileInfo:
         pass
 
 

@@ -28,7 +28,7 @@ class BushyStorage(Storage):
     def retrieve(self, ticket: str) -> BinaryIO:
         pass
 
-    def store(self, data: BinaryIO) -> str:
+    def store(self, data: BinaryIO, **metadata) -> FileInfo:
         ticket = self.generate_ticket()
         path = self.ticket_to_uri(ticket)
         path.parent.mkdir(mode=0o755, parents=True, exist_ok=False)
@@ -38,4 +38,11 @@ class BushyStorage(Storage):
             for block in iter(lambda: data.read(4096), b""):
                 size += target.write(block)
                 hash_md5.update(block)
-        return ticket, size, hash_md5.hexdigest()
+
+        return FileInfo(
+            storage=self.name,
+            ticket=ticket,
+            size=size,
+            checksum=hash_md5.hexdigest(),
+            metadata=metadata
+        )

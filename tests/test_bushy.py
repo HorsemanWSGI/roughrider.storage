@@ -1,6 +1,7 @@
 import uuid
 import io
 from pathlib import Path
+from reiter.upload.meta import FileInfo
 from reiter.upload.bushy import BushyStorage
 from unittest import mock
 
@@ -29,8 +30,10 @@ def test_ticketing(tmp_path):
 def test_persisting(tmp_path):
     bushy = BushyStorage('bushy', tmp_path)
     storage_info = bushy.store(FILE)
-    assert storage_info == (
-        '12345678-1234-5678-1234-56781234567a',
-        28,
-        '53195454e1210adae36ecb34453a1f5a'
-    )
+    assert storage_info == FileInfo(
+            storage='bushy',
+            ticket='12345678-1234-5678-1234-56781234567a',
+            size=28,
+            checksum='53195454e1210adae36ecb34453a1f5a',
+            metadata={}
+        )
