@@ -53,4 +53,4 @@ class StorageCenter:
         storage = self.namespaces.get(namespace)
         if storage is None:
             raise LookupError(f'Namespace `{namespace}` is unknown.')
-        return storage.retrieve(data, **metadata)
+        return storage.retrieve(ticket)
