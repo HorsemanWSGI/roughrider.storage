@@ -38,7 +38,7 @@ class FilesystemStorage(Storage):
                 hash_md5.update(block)
 
         return FileInfo(
-            storage=self.name,
+            namespace=self.name,
             ticket=ticket,
             size=size,
             checksum=hash_md5.hexdigest(),

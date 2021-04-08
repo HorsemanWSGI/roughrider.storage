@@ -39,7 +39,7 @@ def test_persisting(tmp_path):
     flat = FlatStorage('flat', tmp_path)
     storage_info = flat.store(FILE)
     assert storage_info == FileInfo(
-            storage='flat',
+            namespace='flat',
             ticket='my_tiny_id',
             size=28,
             checksum='53195454e1210adae36ecb34453a1f5a',
@@ -59,9 +59,9 @@ def test_id_format(tmp_path):
     flat = FlatStorage('flat', tmp_path)
     ticket = flat.generate_ticket()
     assert len(ticket) == 16
-    assert re.match(r'[^\w]', ticket) == None
+    assert re.match(r'[^\w\-]', ticket) == None
 
     flat.id_size = 10
     ticket = flat.generate_ticket()
     assert len(ticket) == 10
-    assert re.match(r'[^\w]', ticket) == None
+    assert re.match(r'[^\w\-]', ticket) == None

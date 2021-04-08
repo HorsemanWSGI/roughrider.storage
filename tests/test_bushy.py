@@ -32,7 +32,7 @@ def test_persisting(tmp_path):
     bushy = BushyStorage('bushy', tmp_path)
     storage_info = bushy.store(FILE)
     assert storage_info == FileInfo(
-            storage='bushy',
+            namespace='bushy',
             ticket='12345678-1234-5678-1234-56781234567a',
             size=28,
             checksum='53195454e1210adae36ecb34453a1f5a',

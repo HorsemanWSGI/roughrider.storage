@@ -8,7 +8,7 @@ class FileInfo(TypedDict):
     ticket: str
     size: int
     checksum: str
-    storage: str
+    namespace: str
     metadata: Optional[dict] = None
 
 
@@ -29,12 +29,28 @@ class Storage(ABC):
         pass
 
 
-class Uploader:
+class StorageCenter:
     namespaces: Mapping[str, Storage]
 
-    def get(self, info: FileInfo):
-        namespace = namespace.get(info.namespace)
-        if namespace is None:
-            raise LookupError(
-                f'Namespace `{info.namespace}` does not exist.')
-        return namespace.retrieve(info.ticket)
+    def __init__(self):
+        self.namespaces = {}
+
+    def get(self, info: FileInfo) -> Iterable[bytes]:
+        return self.retrieve(info['namespace'], info['ticket'])
+
+    def register(self, storage: Storage):
+        if storage.name in self.namespaces:
+            raise NameError(f'Namespace `{storage.name}` already exists.')
+        self.namespaces[storage.name] = storage
+
+    def store(self, namespace: str, data: BinaryIO, **metadata) -> FileInfo:
+        storage = self.namespaces.get(namespace)
+        if storage is None:
+            raise LookupError(f'Namespace `{namespace}` is unknown.')
+        return storage.store(data, **metadata)
+
+    def retrieve(self, namespace: str, ticket: str) -> Iterable[bytes]:
+        storage = self.namespaces.get(namespace)
+        if storage is None:
+            raise LookupError(f'Namespace `{namespace}` is unknown.')
+        return storage.retrieve(data, **metadata)
