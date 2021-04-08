@@ -1,9 +1,10 @@
 from abc import ABC, abstractmethod
-from typing import NamedTuple, Optional, BinaryIO, Mapping
+from typing_extensions import TypedDict
+from typing import Optional, BinaryIO, Mapping, Iterable
 from pathlib import Path
 
 
-class FileInfo(NamedTuple):
+class FileInfo(TypedDict):
     ticket: str
     size: int
     checksum: str
@@ -11,7 +12,7 @@ class FileInfo(NamedTuple):
     metadata: Optional[dict] = None
 
 
-class Storage:
+class Storage(ABC):
     name: str
     root: Path
 
@@ -20,7 +21,7 @@ class Storage:
         pass
 
     @abstractmethod
-    def retrieve(self, ticket: str) -> BinaryIO:
+    def retrieve(self, ticket: str) -> Iterable[bytes]:
         pass
 
     @abstractmethod

@@ -1,5 +1,6 @@
 import uuid
 import io
+from typing import BinaryIO, Iterator
 from pathlib import Path
 from reiter.upload.meta import FileInfo
 from reiter.upload.bushy import BushyStorage
@@ -37,3 +38,11 @@ def test_persisting(tmp_path):
             checksum='53195454e1210adae36ecb34453a1f5a',
             metadata={}
         )
+
+
+def test_retrieving(tmp_path):
+    bushy = BushyStorage('bushy', tmp_path)
+    storage_info = bushy.store(FILE)
+    iterator = bushy.retrieve(storage_info['ticket'])
+    assert isinstance(iterator, Iterator)
+    assert b''.join(iterator) == FILE.read()
