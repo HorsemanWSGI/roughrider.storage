@@ -26,12 +26,12 @@ def test_store(test_file, tmp_path):
     bushy = BushyStorage('bushy', tmp_path)
     storage_info = bushy.store(test_file)
     assert storage_info == FileInfo(
-            namespace='bushy',
-            ticket='12345678-1234-5678-1234-567812345678',
-            size=28,
-            checksum=('md5', '53195454e1210adae36ecb34453a1f5a'),
-            metadata={}
-        )
+        namespace='bushy',
+        ticket='12345678-1234-5678-1234-567812345678',
+        size=28,
+        checksum=('md5', '53195454e1210adae36ecb34453a1f5a'),
+        metadata={}
+    )
 
 
 @mock.patch('uuid.uuid1', mock_uuid)
@@ -40,12 +40,12 @@ def test_store_metadata(test_file, tmp_path):
     storage_info = bushy.store(
         test_file, filename="test.jpg", owner="admin")
     assert storage_info == FileInfo(
-            namespace='bushy',
-            ticket='12345678-1234-5678-1234-567812345678',
-            size=28,
-            checksum=('md5', '53195454e1210adae36ecb34453a1f5a'),
-            metadata={'filename': 'test.jpg', 'owner': 'admin'}
-        )
+        namespace='bushy',
+        ticket='12345678-1234-5678-1234-567812345678',
+        size=28,
+        checksum=('md5', '53195454e1210adae36ecb34453a1f5a'),
+        metadata={'filename': 'test.jpg', 'owner': 'admin'}
+    )
 
 
 def test_retrieve(test_file, tmp_path):

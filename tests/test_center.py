@@ -48,5 +48,14 @@ def test_store_get_retrieve(test_file, tmp_path):
     center = StorageCenter()
     flat = FlatStorage('somewhere', tmp_path)
     center.register(flat)
+
     info = center.store('somewhere', test_file)
-    assert isinstance(info, FileInfo)
+    assert isinstance(info, dict)
+
+    test_file.seek(0)
+    fiter = center.get(info)
+    assert b''.join(fiter) == test_file.read()
+
+    test_file.seek(0)
+    fiter = center.retrieve('somewhere', info['ticket'])
+    assert b''.join(fiter) == test_file.read()

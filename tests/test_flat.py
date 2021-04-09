@@ -6,22 +6,11 @@ from reiter.upload.flat import FlatStorage
 from unittest import mock
 
 
-def nanoid_generator():
-    yield 'my_tiny_id'
-    yield 'my_other_id'
-    yield 'yet-another-id'
+def mock_nanoid(*args, **kwargs):
+    return 'my_tiny_id'
 
 
-def mock_nanoid():
-    generator = nanoid_generator()
-
-    def mock_generator(vocabulary, size=16):
-        return next(generator)
-
-    return mock_generator
-
-
-@mock.patch('nanoid.generate', mock_nanoid())
+@mock.patch('nanoid.generate', mock_nanoid)
 def test_ticketing(tmp_path):
     flat = FlatStorage('flat', tmp_path)
     ticket = flat.generate_ticket()
@@ -30,17 +19,17 @@ def test_ticketing(tmp_path):
     assert path == tmp_path / ticket
 
 
-@mock.patch('nanoid.generate', mock_nanoid())
+@mock.patch('nanoid.generate', mock_nanoid)
 def test_persisting(test_file, tmp_path):
     flat = FlatStorage('flat', tmp_path)
     storage_info = flat.store(test_file)
     assert storage_info == FileInfo(
-            namespace='flat',
-            ticket='my_tiny_id',
-            size=28,
-            checksum=('md5', '53195454e1210adae36ecb34453a1f5a'),
-            metadata={}
-        )
+        namespace='flat',
+        ticket='my_tiny_id',
+        size=28,
+        checksum=('md5', '53195454e1210adae36ecb34453a1f5a'),
+        metadata={}
+    )
 
 
 def test_retrieving(test_file, tmp_path):
