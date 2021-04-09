@@ -5,10 +5,9 @@ from reiter.upload.fs import FilesystemStorage
 
 class FlatStorage(FilesystemStorage):
 
-    def __init__(self, name: str, root: Path, id_size: int=16):
-        self.name = name
-        self.root = root
-        self.id_size = 16
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.id_size = kwargs.get('id_size', 16)
 
     def generate_ticket(self) -> str:
         return nanoid.generate(

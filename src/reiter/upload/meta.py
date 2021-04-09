@@ -1,13 +1,24 @@
+import enum
+import hashlib
 from abc import ABC, abstractmethod
-from typing_extensions import TypedDict
-from typing import Optional, BinaryIO, Mapping, Iterable
+from functools import partial
 from pathlib import Path
+from typing import Optional, BinaryIO, Mapping, Iterable, Tuple
+from typing_extensions import TypedDict
+
+
+ChecksumAlgorithm = enum.Enum(
+    'Algorithm', {
+        name: partial(hashlib.new, name)
+        for name in hashlib.algorithms_available
+    }
+)
 
 
 class FileInfo(TypedDict):
     ticket: str
     size: int
-    checksum: str
+    checksum: Tuple[str, str]  # (algorithm, value)
     namespace: str
     metadata: Optional[dict] = None
 
