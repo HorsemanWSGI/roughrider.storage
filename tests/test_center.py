@@ -1,7 +1,6 @@
 import pytest
-from reiter.upload.meta import StorageCenter
+from reiter.upload.meta import StorageCenter, FileInfo
 from reiter.upload.flat import FlatStorage
-from reiter.upload.meta import FileInfo
 
 
 def test_empty_store(test_file):
