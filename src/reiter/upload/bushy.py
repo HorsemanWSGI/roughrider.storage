@@ -15,5 +15,5 @@ class BushyStorage(FilesystemStorage):
 
     def ticket_to_uri(self, uid: str) -> Path:
         if not UUID.match(uid):
-            raise KeyError('Invalid ticket format.')
+            raise ValueError('Invalid ticket format.')
         return self.root / uid[0:4] / uid[4:8] / uid[9:]

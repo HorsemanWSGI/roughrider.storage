@@ -11,18 +11,30 @@ def mock_nanoid(*args, **kwargs):
 
 
 @mock.patch('nanoid.generate', mock_nanoid)
-def test_ticketing(tmp_path):
-    flat = FlatStorage('flat', tmp_path)
-    ticket = flat.generate_ticket()
+def test_ticket(tmp_path):
+    storage = FlatStorage('flat', tmp_path)
+    ticket = storage.generate_ticket()
     assert ticket == 'my_tiny_id'
-    path = flat.ticket_to_uri(ticket)
+    path = storage.ticket_to_uri(ticket)
     assert path == tmp_path / ticket
 
 
+def test_ticket_format(tmp_path):
+    storage = FlatStorage('flat', tmp_path)
+    ticket = storage.generate_ticket()
+    assert len(ticket) == 16
+    assert re.match(r'[^\w\-]', ticket) is None
+
+    storage.id_size = 10
+    ticket = storage.generate_ticket()
+    assert len(ticket) == 10
+    assert re.match(r'[^\w\-]', ticket) is None
+
+
 @mock.patch('nanoid.generate', mock_nanoid)
-def test_persisting(test_file, tmp_path):
-    flat = FlatStorage('flat', tmp_path)
-    storage_info = flat.store(test_file)
+def test_store(test_file, tmp_path):
+    storage = FlatStorage('flat', tmp_path)
+    storage_info = storage.store(test_file)
     assert storage_info == FileInfo(
         namespace='flat',
         ticket='my_tiny_id',
@@ -32,30 +44,27 @@ def test_persisting(test_file, tmp_path):
     )
 
 
-def test_retrieving(test_file, tmp_path):
-    flat = FlatStorage('flat', tmp_path)
-    storage_info = flat.store(test_file)
-    iterator = flat.retrieve(storage_info['ticket'])
+def test_retrieve(test_file, tmp_path):
+    storage = FlatStorage('flat', tmp_path)
+    storage_info = storage.store(test_file)
+    iterator = storage.retrieve(storage_info['ticket'])
     assert isinstance(iterator, Iterator)
     test_file.seek(0)
     assert b''.join(iterator) == test_file.read()
 
 
-def test_id_format(tmp_path):
-    flat = FlatStorage('flat', tmp_path)
-    ticket = flat.generate_ticket()
-    assert len(ticket) == 16
-    assert re.match(r'[^\w\-]', ticket) is None
+def test_delete(test_file, tmp_path):
+    storage = FlatStorage('flat', tmp_path)
+    storage_info = storage.store(test_file)
+    storage.delete(storage_info['ticket'])
 
-    flat.id_size = 10
-    ticket = flat.generate_ticket()
-    assert len(ticket) == 10
-    assert re.match(r'[^\w\-]', ticket) is None
+    with pytest.raises(FileNotFoundError):
+        storage.delete(storage_info['ticket'])
 
 
 def test_checksum(test_file, tmp_path):
-    flat = FlatStorage('flat', tmp_path, algorithm="sha256")
-    storage_info = flat.store(test_file)
+    storage = FlatStorage('flat', tmp_path, algorithm="sha256")
+    storage_info = storage.store(test_file)
     assert storage_info['checksum'] == (
         'sha256',
         '18e9b7c9c1be46b1c62938b11b02f513a4d507630c4aee744799df83e0a94ba6'

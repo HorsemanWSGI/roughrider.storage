@@ -39,6 +39,10 @@ class Storage(ABC):
     def store(self, data: BinaryIO, **metadata) -> FileInfo:
         pass
 
+    @abstractmethod
+    def delete(self, ticket: str) -> bool:
+        pass
+
 
 class StorageCenter:
     namespaces: Mapping[str, Storage]
@@ -46,8 +50,11 @@ class StorageCenter:
     def __init__(self):
         self.namespaces = {}
 
-    def get(self, info: FileInfo) -> Iterable[bytes]:
+    def __getitem__(self, info: FileInfo) -> Iterable[bytes]:
         return self.retrieve(info['namespace'], info['ticket'])
+
+    def __delitem__(self, info: FileInfo):
+        return self.delete(info['namespace'], info['ticket'])
 
     def register(self, storage: Storage):
         if storage.name in self.namespaces:
@@ -65,3 +72,9 @@ class StorageCenter:
         if storage is None:
             raise LookupError(f'Namespace `{namespace}` is unknown.')
         return storage.retrieve(ticket)
+
+    def delete(self, namespace: str, ticket: str) -> bool:
+        storage = self.namespaces.get(namespace)
+        if storage is None:
+            raise LookupError(f'Namespace `{namespace}` is unknown.')
+        return storage.delete(ticket)

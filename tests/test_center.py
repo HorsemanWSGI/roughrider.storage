@@ -27,7 +27,7 @@ def test_empty_get():
         metadata={}
     )
     with pytest.raises(LookupError) as exc:
-        center.get(info)
+        center[info]
     assert str(exc.value) == 'Namespace `somewhere` is unknown.'
 
 
@@ -43,7 +43,7 @@ def test_register(tmp_path):
     assert str(exc.value) == 'Namespace `somewhere` already exists.'
 
 
-def test_store_get_retrieve(test_file, tmp_path):
+def test_store_get_retrieve_delete(test_file, tmp_path):
     center = StorageCenter()
     flat = FlatStorage('somewhere', tmp_path)
     center.register(flat)
@@ -52,9 +52,13 @@ def test_store_get_retrieve(test_file, tmp_path):
     assert isinstance(info, dict)
 
     test_file.seek(0)
-    fiter = center.get(info)
+    fiter = center[info]
     assert b''.join(fiter) == test_file.read()
 
     test_file.seek(0)
     fiter = center.retrieve('somewhere', info['ticket'])
     assert b''.join(fiter) == test_file.read()
+
+    del center[info]
+    with pytest.raises(FileNotFoundError):
+        center.retrieve('somewhere', info['ticket'])

@@ -26,8 +26,18 @@ class FilesystemStorage(Storage):
 
     def retrieve(self, ticket: str) -> Iterable[bytes]:
         path = self.ticket_to_uri(ticket)
-        assert path.exists()
+        if not path.exists():
+            raise FileNotFoundError(path)
         return self.file_iterator(path)
+
+    def delete(self, ticket: str) -> Iterable[bytes]:
+        path = self.ticket_to_uri(ticket)
+        try:
+            path.unlink()
+            return True
+        except FileNotFoundError:
+            raise  # we need to propagate.
+        return False
 
     def store(self, data: BinaryIO, **metadata) -> FileInfo:
         ticket = self.generate_ticket()
