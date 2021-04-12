@@ -22,8 +22,8 @@ setup(
     url='http://gitweb.dolmen-project.org',
     download_url='http://pypi.python.org/pypi/roughrider.storage',
     description='File storage utility implementation',
-    long_description=(open("README.txt").read() + "\n" +
-                      open(os.path.join("docs", "HISTORY.txt")).read()),
+    long_description=(open("README.rst").read() + "\n" +
+                      open(os.path.join("docs", "HISTORY.rst")).read()),
     license='ZPL',
     classifiers=[
         'Environment :: Web Environment',
