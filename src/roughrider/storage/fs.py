@@ -1,6 +1,6 @@
 from typing import Iterable, BinaryIO
 from pathlib import Path
-from reiter.upload.meta import FileInfo, Storage, ChecksumAlgorithm
+from roughrider.storage.meta import FileInfo, Storage, ChecksumAlgorithm
 
 
 class FilesystemStorage(Storage):

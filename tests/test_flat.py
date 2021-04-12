@@ -1,8 +1,8 @@
 import pytest
 import re
 from typing import Iterator
-from reiter.upload.meta import FileInfo
-from reiter.upload.flat import FlatStorage
+from roughrider.storage.meta import FileInfo
+from roughrider.storage.flat import FlatStorage
 from unittest import mock
 
 

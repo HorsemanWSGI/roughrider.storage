@@ -15,13 +15,13 @@ test_requires = [
 
 
 setup(
-    name='reiter.upload',
+    name='roughrider.storage',
     version=version,
     author='Souheil CHELFOUH',
     author_email='trollfot@gmail.com',
     url='http://gitweb.dolmen-project.org',
-    download_url='http://pypi.python.org/pypi/reiter.upload',
-    description='File upload utility implementation',
+    download_url='http://pypi.python.org/pypi/roughrider.storage',
+    description='File storage utility implementation',
     long_description=(open("README.txt").read() + "\n" +
                       open(os.path.join("docs", "HISTORY.txt")).read()),
     license='ZPL',
@@ -33,7 +33,7 @@ setup(
     ],
     packages=find_packages('src'),
     package_dir={'': 'src'},
-    namespace_packages=['reiter',],
+    namespace_packages=['roughrider',],
     include_package_data=True,
     zip_safe=False,
     install_requires=install_requires,

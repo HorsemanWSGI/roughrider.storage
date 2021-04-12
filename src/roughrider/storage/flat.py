@@ -1,6 +1,6 @@
 import nanoid
 from pathlib import Path
-from reiter.upload.fs import FilesystemStorage
+from roughrider.storage.fs import FilesystemStorage
 
 
 class FlatStorage(FilesystemStorage):

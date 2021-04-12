@@ -2,8 +2,8 @@ import pytest
 import uuid
 from unittest import mock
 from typing import Iterator
-from reiter.upload.meta import FileInfo
-from reiter.upload.bushy import BushyStorage
+from roughrider.storage.meta import FileInfo
+from roughrider.storage.bushy import BushyStorage
 
 
 def mock_uuid():

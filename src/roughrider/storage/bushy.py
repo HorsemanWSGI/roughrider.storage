@@ -1,7 +1,7 @@
 import re
 import uuid
 from pathlib import Path
-from reiter.upload.fs import FilesystemStorage
+from roughrider.storage.fs import FilesystemStorage
 
 
 UUID = re.compile(
