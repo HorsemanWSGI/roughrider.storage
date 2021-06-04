@@ -32,6 +32,10 @@ class Storage(ABC):
         pass
 
     @abstractmethod
+    def ticket_to_uri(self, uid: str) -> Path:
+        pass
+
+    @abstractmethod
     def retrieve(self, ticket: str) -> Iterable[bytes]:
         pass
 
