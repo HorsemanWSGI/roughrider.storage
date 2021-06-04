@@ -49,6 +49,9 @@ class Storage(ABC):
 
 
 class StorageCenter:
+
+    __slots__ = ('namespaces',)
+
     namespaces: Mapping[str, Storage]
 
     def __init__(self, namespaces=None):
