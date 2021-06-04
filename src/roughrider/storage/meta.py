@@ -47,8 +47,10 @@ class Storage(ABC):
 class StorageCenter:
     namespaces: Mapping[str, Storage]
 
-    def __init__(self):
-        self.namespaces = {}
+    def __init__(self, namespaces=None):
+        if namespaces is None:
+            namespaces = {}
+        self.namespaces = namespaces
 
     def __getitem__(self, info: FileInfo) -> Iterable[bytes]:
         return self.retrieve(info['namespace'], info['ticket'])
