@@ -3,14 +3,13 @@ import hashlib
 from abc import ABC, abstractmethod
 from functools import partial
 from pathlib import Path
-from typing import Optional, BinaryIO, Mapping, Iterable, Tuple
-from typing_extensions import TypedDict
+from typing import TypedDict, BinaryIO, MutableMapping, Iterable, Tuple
 
 
 ChecksumAlgorithm = enum.Enum(
     'Algorithm', {
-        name: partial(hashlib.new, name)
-        for name in hashlib.algorithms_available
+        name: getattr(hashlib, name)
+        for name in hashlib.algorithms_guaranteed
     }
 )
 
@@ -18,9 +17,9 @@ ChecksumAlgorithm = enum.Enum(
 class FileInfo(TypedDict):
     ticket: str
     size: int
-    checksum: Tuple[str, str]  # (algorithm, value)
+    checksum: tuple[str, str]  # (algorithm, value)
     namespace: str
-    metadata: Optional[dict] = None
+    metadata: dict | None = None
 
 
 class Storage(ABC):
@@ -52,7 +51,7 @@ class StorageCenter:
 
     __slots__ = ('namespaces',)
 
-    namespaces: Mapping[str, Storage]
+    namespaces: MutableMapping[str, Storage]
 
     def __init__(self, namespaces=None):
         if namespaces is None:
