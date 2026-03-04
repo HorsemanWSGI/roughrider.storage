@@ -46,7 +46,7 @@ try:
             ticket = self.generate_ticket()
             return self.put(ticket, data, **metadata)
 
-        def put(self, data: BinaryIO, **metadata) -> FileInfo:
+        def put(self, ticket:str, data: BinaryIO, **metadata) -> FileInfo:
             path = self.ticket_to_uri(ticket)
             self.fs.makedirs(str(path.parent), recreate=True)
             size = 0
