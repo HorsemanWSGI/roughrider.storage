@@ -43,6 +43,10 @@ class Storage(ABC):
         pass
 
     @abstractmethod
+    def put(self, ticket: str, data: BinaryIO, **metadata) -> FileInfo:
+        pass
+
+    @abstractmethod
     def delete(self, ticket: str) -> bool:
         pass
 

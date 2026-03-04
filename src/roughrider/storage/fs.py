@@ -41,6 +41,9 @@ class FilesystemStorage(Storage):
 
     def store(self, data: BinaryIO, **metadata) -> FileInfo:
         ticket = self.generate_ticket()
+        return self.put(ticket, data, **metadata)
+
+    def put(self, ticket: str, data: BinaryIO, **metadata) -> FileInfo:
         path = self.ticket_to_uri(ticket)
         assert not path.exists()  # this happens on ticket conflicts.
         depth = len(path.relative_to(self.root).parents)

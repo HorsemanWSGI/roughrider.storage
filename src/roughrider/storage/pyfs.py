@@ -44,6 +44,9 @@ try:
 
         def store(self, data: BinaryIO, **metadata) -> FileInfo:
             ticket = self.generate_ticket()
+            return self.put(ticket, data, **metadata)
+
+        def put(self, data: BinaryIO, **metadata) -> FileInfo:
             path = self.ticket_to_uri(ticket)
             self.fs.makedirs(str(path.parent), recreate=True)
             size = 0
@@ -60,5 +63,7 @@ try:
                 checksum=(fhash.name, fhash.hexdigest()),
                 metadata=metadata
             )
+
+
 except ImportError:
     pass

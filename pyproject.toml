@@ -1,0 +1,27 @@
+running pyproject
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "roughrider.storage"
+version = "0.3.0"
+license = {text = "ZPL"}
+authors = [{name = "Souheil Chelfouh", email = "trollfot@gmail.com"}]
+maintainers = [{name = "Souheil Chelfouh", email = "trollfot@gmail.com"}]
+classifiers = [
+  "Environment :: Web Environment",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: Zope Public License",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13"
+]
+description = "File storage utility implementation"
+readme = {file = "README.rst", content-type = "text/x-rst"}
+requires-python = ">=3.11"
+dependencies = ["nanoid"]
+
+[project.optional-dependencies]
+test = ["pytest"]
